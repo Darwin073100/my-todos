@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
-import { TodoCounter } from '../TodoCounter';
-import { TodoSearch } from '../TodoSearch';
-import { TodoList } from '../TodoList';
-import { TodoItem } from '../TodoItem';
-import { CreateTodoButton } from '../CreateTodoButton';
+import React, { useState } from "react";
+import { useLocalStorage } from "./useLocalStorage";
+import { AppUI } from "./AppUI";
+
 
 // const defaultTodos = [
 //   { text: 'Cortar cebolla', completed: true },
@@ -11,78 +9,54 @@ import { CreateTodoButton } from '../CreateTodoButton';
 //   { text: 'Llorar con la Llorona', completed: true },
 //   { text: 'LALALALALA', completed: false },
 // ];
-//   localStorage.setItem('TODOS_V1', defaultTodos);
-  // localStorage.removeItem('TODOS_V1');
+//   localStorage.setItem('TODOS_V1', JSON.stringify(defaultTodos));
+// localStorage.removeItem('TODOS_V1');
 
 function App() {
-  const localStorageTodos = localStorage.getItem('TODOS_V1');
-  let parsedTodos;
+  // Usando nuestro propio hook
+  const [todos, saveTodos] = useLocalStorage('TODOS_V1', []);
+  const [searchValue, setSearchValue] = useState("");
 
-  if(!localStorageTodos){
-    localStorage.setItem('TODO_V1', JSON.stringify([]));
-    parsedTodos = [];
-  } else {
-    parsedTodos = JSON.parse(localStorageTodos);
-  }
-  
-  const [todos, setTodos] = useState(parsedTodos);
-  const [searchValue, setSearchValue] = useState('');
-  
   // Busca los todos dependiendo del text
-  const searchedTodos = todos.filter((todo)=>{
+  const searchedTodos = todos.filter((todo) => {
     const todoText = todo.text.toLowerCase();
     const searchText = searchValue.toLowerCase();
     return todoText.includes(searchText);
   });
 
-  const completedTodos = todos.filter(todo => !!todo.completed == true).length;
+  const completedTodos = todos.filter(
+    (todo) => !!todo.completed == true
+  ).length;
   const totalTodo = todos.length;
 
-  // Guarda los datos en localStorage
-  const saveTodos = (newTodos)=>{
-    localStorage.setItem('TODOS_V1', JSON.stringify(newTodos));
-    setTodos(newTodos);
-  };
-
   // Completa todos
-  const completeTodo = (text)=>{
+  const completeTodo = (text) => {
     const newTodos = [...todos];
-    const todoIndex = newTodos.findIndex((todo)=> todo.text == text);
+    const todoIndex = newTodos.findIndex((todo) => todo.text == text);
     newTodos[todoIndex].completed = true;
     saveTodos(newTodos);
   };
 
   // Elimina todos
-  const deleteTodo = (text)=>{
+  const deleteTodo = (text) => {
     const newTodos = [...todos];
-    const todoIndex = newTodos.findIndex((todo)=> todo.text == text);
-    // remueve elementos de un array
+    const todoIndex = newTodos.findIndex((todo) => todo.text == text);
+    // Remueve elementos de un array
     newTodos.splice(todoIndex, 1);
-    newTodos(newTodos);
+    saveTodos(newTodos);
   };
-
+ 
   return (
-    <>
-      <TodoCounter completed={completedTodos} total={totalTodo} />
-      <TodoSearch 
-        searchValue={searchValue} 
-        setSearchValue={setSearchValue} />
-
-      <TodoList>
-        {searchedTodos.map(todo => (
-          <TodoItem
-            key={todo.text}
-            text={todo.text}
-            completed={todo.completed}
-            onCompleted={()=> completeTodo(todo.text)}
-            onDelete={()=> deleteTodo(todo.text)}
-          />
-        ))}
-      </TodoList>
-      
-      <CreateTodoButton />
-    </>
+    <AppUI 
+      deleteTodo={deleteTodo}
+      completeTodo={completeTodo}
+      completedTodos={completedTodos}
+      setSearchValue={setSearchValue}
+      totalTodo={totalTodo}
+      searchedTodos={searchedTodos}
+      searchValue={searchValue}
+    />
   );
 }
 
-export {App};
+export { App };
