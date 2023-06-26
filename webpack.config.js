@@ -11,7 +11,7 @@ module.exports ={
     },
     mode: 'development',
     resolve:{
-        extensions: ['.js', '.jsx'],
+        extensions: ['.js', '.jsx', '.svg'],
         alias: {
             '@components': path.resolve(__dirname,'src/components/'),
             '@containers': path.resolve(__dirname,'src/containers/'),
