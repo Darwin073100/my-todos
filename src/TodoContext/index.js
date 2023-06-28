@@ -3,11 +3,11 @@ import { useLocalStorage } from "./useLocalStorage";
 
 const TodoContext = React.createContext();
 
-function TodoProvider({children}) {
-    // Usando nuestro propio hook
-  const {item: todos, saveItem: saveTodos, loading, error} = useLocalStorage('TODOS_V1', []);
+function TodoProvider({ children }) {
+  // Usando nuestro propio hook
+  const { item: todos, saveItem: saveTodos, loading, error } = useLocalStorage('TODOS_V1', []);
   const [searchValue, setSearchValue] = useState("");
-
+  const [openModal, setOpenModal] = useState(false);
   // Busca los todos dependiendo del text
   const searchedTodos = todos.filter((todo) => {
     const todoText = todo.text.toLowerCase();
@@ -36,21 +36,34 @@ function TodoProvider({children}) {
     newTodos.splice(todoIndex, 1);
     saveTodos(newTodos);
   };
-    return (
-        <TodoContext.Provider value={{
-            loading,
-            error,
-            deleteTodo, 
-            completeTodo, 
-            completedTodos, 
-            searchValue,
-            setSearchValue, 
-            totalTodos, 
-            searchedTodos
-        }}>
-            {children}
-        </TodoContext.Provider>
-    )
+  const addTodo = (text) => {
+    const newTodos = [
+      ...todos,
+      {
+        text,
+        completed: false
+      }
+    ];
+    saveTodos(newTodos);
+  };
+  return (
+    <TodoContext.Provider value={{
+      addTodo,
+      loading,
+      error,
+      deleteTodo,
+      completeTodo,
+      completedTodos,
+      searchValue,
+      setSearchValue,
+      totalTodos,
+      searchedTodos,
+      openModal,
+      setOpenModal
+    }}>
+      {children}
+    </TodoContext.Provider>
+  )
 }
 
 export { TodoContext, TodoProvider };

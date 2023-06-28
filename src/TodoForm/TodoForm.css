@@ -1,0 +1,44 @@
+form{
+    width: 90%;
+    max-width: 300px;
+    background-color: aliceblue;
+    border-radius: 16px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+form textarea{
+    padding: 8px;
+    width: 90%;
+    font-size: 16px;
+    height: 100px;
+    outline-color: #3586ff;
+}
+
+form label{
+    color: black;
+}
+
+.buttons-container{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.TodoForm-button--cancel{
+    background-color: brown;
+    color: aliceblue;
+    padding: 8px;
+    border: 2px solid brown;
+}
+
+.TodoForm-button--add{
+    background-color: #3586ff;
+    color: aliceblue;
+    padding: 8px;
+    border: 2px solid #3586ff;
+}
