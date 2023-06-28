@@ -5,7 +5,9 @@
   "main": "src/index.js",
   "scripts": {
     "start": "webpack serve --open",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "keywords": [
     "react",
@@ -30,7 +32,9 @@
   },
   "devDependencies": {
     "css-loader": "^6.8.1",
+    "gh-pages": "^5.0.0",
     "mini-css-extract-plugin": "^2.7.6",
     "style-loader": "^3.3.3"
-  }
+  },
+  "homepage": "https://darwin073100.github.io/my-todos"
 }
